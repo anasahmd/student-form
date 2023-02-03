@@ -1,0 +1,77 @@
+<% layout('layouts/boilerplate') %>
+
+<div class="card px-4 mx-5 mt-5">
+  <div class="card-body mx-auto">
+    <h1 class="fs-1 mt-4 text-center insta-clone">InstaClone</h1>
+    <p class="text-muted text-center fs-6 fw-6">
+      Sign up to see photos from your friends
+    </p>
+    <a href="/about" class="text-reset">
+      <div class="d-grid">
+        <button class="btn btn-primary">About InstaClone</button>
+      </div>
+    </a>
+    <div class="d-flex py-3 flex-row align-items-center">
+      <div class="col-5 text-muted">
+        <hr />
+      </div>
+      <div class="text-muted text-center col-2 fs-7">OR</div>
+      <div class="col-5 text-muted">
+        <hr />
+      </div>
+    </div>
+    <form action="/register" method="POST" novalidate class="needs-validation">
+      <div class="mb-4">
+        <input
+          type="email"
+          name="user[email]"
+          class="form-control"
+          placeholder="Email"
+          required
+        />
+      </div>
+      <div class="mb-4">
+        <input
+          type="text"
+          name="user[name]"
+          class="form-control"
+          placeholder="Full Name"
+        />
+      </div>
+      <div class="mb-4 position-relative">
+        <input
+          type="password"
+          name="user[password]"
+          class="form-control"
+          id="password"
+          placeholder="Password"
+          required
+          autocomplete="new-password"
+        />
+        <div
+          id="show"
+          class="position-absolute fs-7 fw-5 my-auto"
+          style="top: 8px; right: 12px; cursor: pointer"
+        >
+          Show
+        </div>
+        <div
+          id="hide"
+          class="position-absolute fs-7 fw-5 my-auto"
+          style="top: 8px; right: 12px; display: none; cursor: pointer"
+        >
+          Hide
+        </div>
+      </div>
+      <div class="d-grid mb-4">
+        <button class="btn btn-primary spinner">Register</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="card px-4 mx-5 mt-5">
+  <div class="card-body text-center w-90 mx-auto">
+    <span>Have an account?</span> <a href="/login">Log in</a>
+  </div>
+</div>

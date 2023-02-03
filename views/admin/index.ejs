@@ -1,0 +1,27 @@
+<% layout('layouts/boilerplate')%> <%= students %>
+<table class="table table-bordered">
+  <thead>
+    <tr>
+      <th scope="col">Name</th>
+      <th scope="col">Father Name</th>
+      <th scope="col">Number</th>
+      <th scope="col">Email</th>
+      <th scope="col">D.O.B</th>
+      <th scope="col">Gender</th>
+      <th scope="col">Address</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% for(let student of students){ %>
+    <tr>
+      <td><%= student.name %></td>
+      <td><%= student.fatherName %></td>
+      <td><%= student.contactNumber %></td>
+      <td><%= student.email %></td>
+      <td><%= student.dob %></td>
+      <td><%= student.gender %></td>
+      <td><%= student.address %></td>
+    </tr>
+    <% } %>
+  </tbody>
+</table>

@@ -1,0 +1,45 @@
+<% layout('layouts/boilerplate') %>
+
+<!-- <div>Hey there <%= user %></div> -->
+
+<h2>Personal Details</h2>
+
+<div class="row">
+  <h3 class="col fs-5 fw-semibold">Name</h3>
+  <span class="col fs-5"><%= %> </span>
+</div>
+
+<div class="row">
+  <h3 class="col fs-5 fw-semibold">Father Name</h3>
+  <span class="col fs-5"><%= user.fatherName %> </span>
+</div>
+
+<div class="row">
+  <h3 class="col fs-5 fw-semibold">Number</h3>
+  <span class="col fs-5"><%= user.contactNumber %> </span>
+</div>
+
+<div class="row">
+  <h3 class="col fs-5 fw-semibold">Email</h3>
+  <span class="col fs-5"><%= user.email %> </span>
+</div>
+
+<div class="row">
+  <h3 class="col fs-5 fw-semibold">Date of Birth</h3>
+  <span class="col fs-5"><%= user.dob %> </span>
+</div>
+
+<div class="row">
+  <h3 class="col fs-5 fw-semibold">Gender</h3>
+  <span class="col fs-5"><%= user.gender %> </span>
+</div>
+
+<div class="row">
+  <h3 class="col fs-5 fw-semibold">Address</h3>
+  <span class="col fs-5"><%= user.address %> </span>
+</div>
+
+<div class="row">
+  <h3 class="col fs-5 fw-semibold">Status</h3>
+  <span class="col fs-5"><%= user.status %> </span>
+</div>

@@ -1,0 +1,54 @@
+<% layout('layouts/boilerplate') %>
+
+<div class="card px-4 mx-5 mt-5">
+  <div class="card-body mx-auto">
+    <h1 class="my-4 text-center insta-clone fs-1">InstaClone</h1>
+    <form action="/login" method="POST" novalidate class="needs-validation">
+      <div class="mb-4">
+        <input
+          type="text"
+          name="email"
+          class="form-control"
+          placeholder="Email"
+          required
+        />
+      </div>
+      <div class="mb-4 position-relative">
+        <input
+          type="password"
+          name="password"
+          class="form-control"
+          placeholder="Password"
+          id="password"
+          required
+        />
+        <div
+          id="show"
+          class="position-absolute fs-7 fw-5 my-auto"
+          style="top: 8px; right: 12px; cursor: pointer"
+        >
+          Show
+        </div>
+        <div
+          id="hide"
+          class="position-absolute fs-7 fw-5 my-auto"
+          style="top: 8px; right: 12px; display: none; cursor: pointer"
+        >
+          Hide
+        </div>
+      </div>
+      <div class="d-grid">
+        <button class="btn btn-primary spinner">Log in</button>
+      </div>
+    </form>
+    <div class="text-center mt-4 fs-7">
+      <a href="/accounts/password/reset">Forgot password?</a>
+    </div>
+  </div>
+</div>
+
+<div class="card px-4 mx-5 mt-5">
+  <div class="card-body text-center w-90 mx-auto">
+    <span>Don't have an account?</span> <a href="/register">Register</a>
+  </div>
+</div>

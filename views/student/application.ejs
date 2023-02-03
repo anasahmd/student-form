@@ -1,0 +1,197 @@
+<% layout('layouts/boilerplate') %> <% if (typeof user !== 'undefined'){ %>
+<form
+  action="/student/apply"
+  method="POST"
+  class="container w-90 mt-4 needs-validation"
+  novalidate
+>
+  <div class="mb-3">
+    <label for="name" class="form-label">Name</label>
+    <input
+      type="text"
+      id="name"
+      class="form-control"
+      name="student[name]"
+      value="<%= user.name %> "
+      disabled
+      required
+    />
+  </div>
+  <div class="mb-3">
+    <label for="father-name" class="form-label">Father Name</label>
+    <input
+      type="text"
+      id="father-name"
+      class="form-control"
+      name="student[fatherName]"
+      required
+    />
+  </div>
+  <div class="mb-3">
+    <label for="number" class="form-label">Number</label>
+    <input
+      type="tel"
+      id="number"
+      class="form-control"
+      name="student[contactNumber]"
+      required
+    />
+  </div>
+  <div class="mb-3">
+    <label for="email" class="form-label">Email</label>
+    <input
+      type="email"
+      id="email"
+      class="form-control"
+      name="student[email]"
+      value="<%= user.email %> "
+      disabled
+      required
+    />
+  </div>
+  <div class="mb-3 d-flex gap-3">
+    <div class="">
+      <label for="dob" class="form-label">Date of Birth</label>
+      <input
+        type="date"
+        id="dob"
+        class="form-control"
+        name="student[dob]"
+        required
+      />
+    </div>
+    <div class="">
+      <label for="gender" class="form-label">Gender</label>
+      <select
+        id="gender"
+        class="form-select"
+        aria-label="Default select example"
+        name="student[gender]"
+        required
+      >
+        <option hidden disabled selected value></option>
+        <option value="Male">Male</option>
+        <option value="Female">Female</option>
+        <option value="Other">Other</option>
+      </select>
+    </div>
+  </div>
+  <div class="mb-3">
+    <label for="formFile" class="form-label">Passport Size Photo</label>
+    <input class="form-control" type="file" id="formFile" />
+  </div>
+  <div class="mb-3">
+    <label for="address" class="form-label">Address</label>
+    <textarea
+      type="text"
+      id="address"
+      class="form-control"
+      name="student[address]"
+      required
+    ></textarea>
+  </div>
+
+  <div class="d-grid mb-4">
+    <button class="btn btn-primary">Apply</button>
+  </div>
+</form>
+<% } else if (typeof student !== 'undefined'){ %>
+<form
+  action=""
+  method="POST"
+  class="container w-90 mt-4 needs-validation"
+  novalidate
+>
+  <div class="mb-3">
+    <label for="name" class="form-label">Name</label>
+    <input
+      type="text"
+      id="name"
+      class="form-control"
+      name="student[name]"
+      value="<%= student.name %> "
+      disabled
+      required
+    />
+  </div>
+  <div class="mb-3">
+    <label for="father-name" class="form-label">Father Name</label>
+    <input
+      type="text"
+      id="father-name"
+      class="form-control"
+      name="student[fatherName]"
+      value="<%= student.fatherName %> "
+      disabled
+      required
+    />
+  </div>
+  <div class="mb-3">
+    <label for="number" class="form-label">Number</label>
+    <input
+      type="tel"
+      id="number"
+      class="form-control"
+      name="student[contactNumber]"
+      value="<%= student.contactNumber %> "
+      disabled
+      required
+    />
+  </div>
+  <div class="mb-3">
+    <label for="email" class="form-label">Email</label>
+    <input
+      type="email"
+      id="email"
+      class="form-control"
+      name="student[email]"
+      value="<%= student.email %> "
+      disabled
+      required
+    />
+  </div>
+  <div class="mb-3 d-flex gap-3">
+    <div class="">
+      <label for="dob" class="form-label">Date of Birth</label>
+      <input
+        type="text"
+        id="dob"
+        class="form-control"
+        name="student[dob]"
+        value="<%= format(student.dob, 'MM/dd/yyyy') %> "
+        disabled
+        required
+      />
+    </div>
+    <div class="">
+      <label for="gender" class="form-label">Gender</label>
+      <input
+        type="text"
+        id="gender"
+        class="form-control"
+        name="student[gender]"
+        value="<%= student.gender %> "
+        disabled
+        required
+      />
+    </div>
+  </div>
+  <div class="mb-3">
+    <label for="formFile" class="form-label">Passport Size Photo</label>
+    <input class="form-control" type="file" id="formFile" />
+  </div>
+  <div class="mb-3">
+    <label for="address" class="form-label">Address</label>
+    <textarea
+      type="text"
+      id="address"
+      class="form-control"
+      name="student[address]"
+      disabled
+      required
+    >
+<%= student.address %></textarea
+    >
+  </div>
+</form>
+<% } %>
