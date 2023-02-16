@@ -74,7 +74,7 @@ app.post(
   '/register',
   catchAsync(async (req, res) => {
     try {
-      const { name, contactNumber, email, password } = req.body.user;
+      const { name, email, password } = req.body.user;
       const newUser = new User({
         name,
         email,
@@ -166,6 +166,75 @@ app.get(
   catchAsync(async (req, res, next) => {
     const students = await Student.find({});
     res.render('admin/index', { students });
+  })
+);
+
+app.get(
+  '/admin/dashboard/pending',
+  isAdmin,
+  catchAsync(async (req, res, next) => {
+    const students = await Student.find({ status: 0 });
+    res.render('admin/index', { students });
+  })
+);
+
+app.get(
+  '/admin/dashboard/accepted',
+  isAdmin,
+  catchAsync(async (req, res, next) => {
+    const students = await Student.find({ status: 1 });
+    res.render('admin/index', { students });
+  })
+);
+
+app.get(
+  '/admin/dashboard/rejected',
+  isAdmin,
+  catchAsync(async (req, res, next) => {
+    const students = await Student.find({ status: -1 });
+    res.render('admin/index', { students });
+  })
+);
+
+app.get(
+  '/admin/dashboard/passed',
+  isAdmin,
+  catchAsync(async (req, res, next) => {
+    const students = await Student.find({ status: 2 });
+    res.render('admin/index', { students });
+  })
+);
+
+app.post(
+  '/student/accept/:id',
+  isAdmin,
+  catchAsync(async (req, res) => {
+    const student = await Student.findById(req.params.id);
+    student.status = 1;
+    await student.save();
+    res.redirect('back');
+  })
+);
+
+app.post(
+  '/student/reject/:id',
+  isAdmin,
+  catchAsync(async (req, res) => {
+    const student = await Student.findById(req.params.id);
+    student.status = -1;
+    await student.save();
+    res.redirect('back');
+  })
+);
+
+app.post(
+  '/student/passed/:id',
+  isAdmin,
+  catchAsync(async (req, res) => {
+    const student = await Student.findById(req.params.id);
+    student.status = 2;
+    await student.save();
+    res.redirect('back');
   })
 );
 

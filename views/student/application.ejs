@@ -193,5 +193,17 @@
 <%= student.address %></textarea
     >
   </div>
+  <div>
+    <div>Status</div>
+    <% if(student.status === 0){ %>
+    <button type="button" class="btn btn-warning">Pending</button>
+    <% } else if (student.status === -1){ %>
+    <button type="button" class="btn btn-danger">Rejected</button>
+    <% } else if (student.status === 1){ %>
+    <button type="button" class="btn btn-success">Accepted</button>
+    <% } else if (student.status === 2){ %>
+    <button type="button" class="btn btn-primary">Passed</button>
+    <% } %>
+  </div>
 </form>
 <% } %>

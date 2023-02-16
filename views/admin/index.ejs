@@ -1,7 +1,25 @@
-<% layout('layouts/boilerplate')%> <%= students %>
+<% layout('layouts/boilerplate')%>
+<div class="d-flex m-3 gap-3">
+  <button type="button" class="btn btn-secondary">
+    <a class="text-reset" href="/admin/dashboard/">All</a>
+  </button>
+  <button type="button" class="btn btn-warning">
+    <a class="text-reset" href="/admin/dashboard/pending">Pending</a>
+  </button>
+  <button type="button" class="btn btn-success">
+    <a class="text-reset" href="/admin/dashboard/accepted">Accepted</a>
+  </button>
+  <button type="button" class="btn btn-danger">
+    <a class="text-reset" href="/admin/dashboard/rejected">Rejected</a>
+  </button>
+  <button type="button" class="btn btn-primary">
+    <a class="text-reset" href="/admin/dashboard/passed">Passed</a>
+  </button>
+</div>
 <table class="table table-bordered">
   <thead>
     <tr>
+      <th scope="col">S. No.</th>
       <th scope="col">Name</th>
       <th scope="col">Father Name</th>
       <th scope="col">Number</th>
@@ -9,18 +27,49 @@
       <th scope="col">D.O.B</th>
       <th scope="col">Gender</th>
       <th scope="col">Address</th>
+      <th scope="col">Actions</th>
+      <th scope="col">Status</th>
     </tr>
   </thead>
   <tbody>
     <% for(let student of students){ %>
     <tr>
+      <td><%= student.id %></td>
       <td><%= student.name %></td>
       <td><%= student.fatherName %></td>
       <td><%= student.contactNumber %></td>
       <td><%= student.email %></td>
-      <td><%= student.dob %></td>
+      <td><%= format(student.dob, 'MM/dd/yyyy') %></td>
       <td><%= student.gender %></td>
       <td><%= student.address %></td>
+      <td class="d-flex gap-2 px-2">
+        <form action="/student/accept/<%= student._id %>" method="POST">
+          <button type="submit" class="btn btn-success">
+            <i class="fa-solid fa-thumbs-up"></i>
+          </button>
+        </form>
+        <form action="/student/reject/<%= student._id %>" method="POST">
+          <button type="submit" class="btn btn-danger">
+            <i class="fa-solid fa-thumbs-down"></i>
+          </button>
+        </form>
+        <form action="/student/passed/<%= student._id %>" method="POST">
+          <button type="submit" class="btn btn-primary">
+            <i class="fa-solid fa-graduation-cap"></i>
+          </button>
+        </form>
+      </td>
+      <td>
+        <% if(student.status === 0){ %>
+        <button type="button" class="btn btn-warning">Pending</button>
+        <% } else if (student.status === -1){ %>
+        <button type="button" class="btn btn-danger">Rejected</button>
+        <% } else if (student.status === 1){ %>
+        <button type="button" class="btn btn-success">Accepted</button>
+        <% } else if (student.status === 2){ %>
+        <button type="button" class="btn btn-primary">Passed</button>
+        <% } %>
+      </td>
     </tr>
     <% } %>
   </tbody>
