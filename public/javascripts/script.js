@@ -1,5 +1,4 @@
 // Show hide password
-console.log('unga bunga');
 const show = document.getElementById('show');
 const hide = document.getElementById('hide');
 const password = document.getElementById('password');

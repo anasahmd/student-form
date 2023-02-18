@@ -19,6 +19,10 @@ const userSchema = new Schema({
     required: true,
     enum: ['student', 'admin'],
   },
+  student: {
+    type: Schema.Types.ObjectId,
+    ref: 'Student',
+  },
 });
 
 userSchema.plugin(passportLocalMongoose, {

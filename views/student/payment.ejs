@@ -1,0 +1,27 @@
+<% layout('layouts/boilerplate')%>
+<table class="table table-bordered">
+  <thead>
+    <tr>
+      <th scope="col">Month</th>
+      <th scope="col">Amount</th>
+      <th scope="col">Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% paymentData.monthlyData.forEach(data => { %>
+    <tr>
+      <td><%= format(data.startDate, 'MMM yyyy') %></td>
+      <td><%= data.amount %></td>
+      <td>
+        <%if( data.paid){ %>
+        <button type="button" class="btn btn-success">Paid</button>
+        <% } else { %>
+        <form action="/student/payment/<%= data._id %>" method="POST">
+          <button type="submit" class="btn btn-warning">Pay</button>
+        </form>
+        <% } %>
+      </td>
+    </tr>
+    <% }) %>
+  </tbody>
+</table>

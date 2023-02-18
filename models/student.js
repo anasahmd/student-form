@@ -43,6 +43,14 @@ const studentSchema = new Schema({
     default: 0,
     enum: [-1, 0, 1, 2],
   },
+  user: {
+    type: Schema.Types.ObjectId,
+    ref: 'User',
+  },
+  payment: {
+    type: Schema.Types.ObjectId,
+    ref: 'Payment',
+  },
 });
 
 studentSchema.plugin(AutoIncrement, { inc_field: 'id' });

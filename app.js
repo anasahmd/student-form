@@ -9,9 +9,10 @@ const session = require('express-session');
 const flash = require('connect-flash');
 const passport = require('passport');
 const LocalStrategy = require('passport-local');
-const format = require('date-fns/format');
+const { format, startOfMonth, addMonths } = require('date-fns');
 const Student = require('./models/student');
 const User = require('./models/user');
+const Payment = require('./models/payment');
 const { isLoggedIn, isAdmin } = require('./middleware');
 
 app.engine('ejs', ejsMate);
@@ -107,7 +108,7 @@ app.post(
     if (req.user.role === 'admin') {
       res.redirect('/admin/dashboard');
     } else if (req.user.role === 'student') {
-      res.redirect('/student/apply');
+      res.redirect('/student/payment');
     }
   }
 );
@@ -155,8 +156,33 @@ app.post(
       address,
       status: 0,
     });
+    newStudent.user = req.user._id;
+    user.student = newStudent._id;
     await newStudent.save();
-    res.redirect('/student/apply');
+    await user.save();
+    res.redirect('/student/payment');
+  })
+);
+
+app.get(
+  '/student/payment',
+  catchAsync(async (req, res) => {
+    const paymentData = await Payment.findOne({ email: req.user.email });
+    res.render('student/payment', { paymentData });
+  })
+);
+
+app.post(
+  '/student/payment/:id',
+  catchAsync(async (req, res) => {
+    const paymentData = await Payment.findOne({
+      email: req.user.email,
+    });
+    paymentData.monthlyData.find(
+      ({ _id }) => _id.toString() === req.params.id
+    ).paid = true;
+    await paymentData.save();
+    res.redirect('back');
   })
 );
 
@@ -210,7 +236,22 @@ app.post(
   isAdmin,
   catchAsync(async (req, res) => {
     const student = await Student.findById(req.params.id);
+    const monthlyData = [];
+    for (let i = 0; i < 12; i++) {
+      const startDate = addMonths(startOfMonth(new Date()), i);
+      const paid = false;
+      const amount = 1000;
+      monthlyData.push({ startDate, amount, paid });
+    }
+
+    const newPayment = new Payment({
+      monthlyData,
+      student: student._id,
+      email: student.email,
+    });
     student.status = 1;
+    student.payment = newPayment._id;
+    await newPayment.save();
     await student.save();
     res.redirect('back');
   })
