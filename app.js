@@ -9,7 +9,7 @@ const session = require('express-session');
 const flash = require('connect-flash');
 const passport = require('passport');
 const LocalStrategy = require('passport-local');
-const { format, startOfMonth, addMonths } = require('date-fns');
+const { format, endOfMonth, addMonths, subMonths } = require('date-fns');
 const Student = require('./models/student');
 const User = require('./models/user');
 const Payment = require('./models/payment');
@@ -168,6 +168,7 @@ app.get(
   '/student/payment',
   catchAsync(async (req, res) => {
     const paymentData = await Payment.findOne({ email: req.user.email });
+    console.log(paymentData.dues);
     res.render('student/payment', { paymentData });
   })
 );
@@ -178,9 +179,22 @@ app.post(
     const paymentData = await Payment.findOne({
       email: req.user.email,
     });
-    paymentData.monthlyData.find(
+    const reqMonth = paymentData.monthlyData.findIndex(
       ({ _id }) => _id.toString() === req.params.id
-    ).paid = true;
+    );
+    if (reqMonth === 0) {
+      paymentData.monthlyData[reqMonth].paid = true;
+      paymentData.duesFrom = addMonths(
+        paymentData.monthlyData[reqMonth].endDate,
+        1
+      );
+    } else if (paymentData.monthlyData[reqMonth - 1].paid === true) {
+      paymentData.monthlyData[reqMonth].paid = true;
+      paymentData.duesFrom = addMonths(
+        paymentData.monthlyData[reqMonth].endDate,
+        1
+      );
+    }
     await paymentData.save();
     res.redirect('back');
   })
@@ -238,16 +252,17 @@ app.post(
     const student = await Student.findById(req.params.id);
     const monthlyData = [];
     for (let i = 0; i < 12; i++) {
-      const startDate = addMonths(startOfMonth(new Date()), i);
+      const endDate = addMonths(endOfMonth(new Date('2023-01-21')), i);
       const paid = false;
       const amount = 1000;
-      monthlyData.push({ startDate, amount, paid });
+      monthlyData.push({ endDate, amount, paid });
     }
 
     const newPayment = new Payment({
       monthlyData,
       student: student._id,
       email: student.email,
+      duesFrom: endOfMonth(new Date('2023-01-21')),
     });
     student.status = 1;
     student.payment = newPayment._id;

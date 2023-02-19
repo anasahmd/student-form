@@ -1,16 +1,16 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
-const { format } = require('date-fns');
+const { format, endOfMonth, differenceInDays } = require('date-fns');
 
 const paymentSchema = new Schema({
   monthlyData: [
     {
-      startDate: Date,
+      endDate: Date,
       amount: Number,
       paid: Boolean,
     },
   ],
-  paidTill: Date,
+  duesFrom: Date,
   student: {
     type: Schema.Types.ObjectId,
     ref: 'Student',
@@ -18,11 +18,17 @@ const paymentSchema = new Schema({
   email: String,
 });
 
-// paymentSchema
-//   .path('monthlyData')
-//   .schema.virtual('monthId')
-//   .get(function () {
-//     return format(this.startDate, 'MMMyyyy');
-//   });
+paymentSchema
+  .path('monthlyData')
+  .schema.virtual('monthId')
+  .get(function () {
+    return format(this.endDate, 'MMMyyyy');
+  });
+
+paymentSchema.virtual('dues').get(function () {
+  if (endOfMonth(new Date()) > this.duesFrom) {
+    return differenceInDays(new Date(), this.duesFrom);
+  }
+});
 
 module.exports = mongoose.model('Payment', paymentSchema);

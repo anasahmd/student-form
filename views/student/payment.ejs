@@ -10,7 +10,7 @@
   <tbody>
     <% paymentData.monthlyData.forEach(data => { %>
     <tr>
-      <td><%= format(data.startDate, 'MMM yyyy') %></td>
+      <td><%= format(data.endDate, 'MMM yyyy') %></td>
       <td><%= data.amount %></td>
       <td>
         <%if( data.paid){ %>
