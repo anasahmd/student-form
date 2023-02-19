@@ -1,6 +1,12 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
-const { format, endOfMonth, differenceInDays } = require('date-fns');
+const {
+  format,
+  endOfMonth,
+  differenceInDays,
+  addMonths,
+  addDays,
+} = require('date-fns');
 
 const paymentSchema = new Schema({
   monthlyData: [
@@ -20,15 +26,24 @@ const paymentSchema = new Schema({
 
 paymentSchema
   .path('monthlyData')
-  .schema.virtual('monthId')
+  .schema.virtual('lateFees')
   .get(function () {
-    return format(this.endDate, 'MMMyyyy');
+    // return format(this.endDate, 'MMMyyyy');
+    if (this.paid !== true && new Date() > this.endDate) {
+      return differenceInDays(
+        endOfMonth(addDays(this.endDate, 1)),
+        this.endDate
+      ) < differenceInDays(new Date(), this.endDate)
+        ? differenceInDays(endOfMonth(addDays(this.endDate, 1)), this.endDate) *
+            10
+        : differenceInDays(new Date(), this.endDate) * 10;
+    }
   });
 
-paymentSchema.virtual('dues').get(function () {
-  if (endOfMonth(new Date()) > this.duesFrom) {
-    return differenceInDays(new Date(), this.duesFrom);
-  }
-});
+// paymentSchema.virtual('dues').get(function () {
+//   if (endOfMonth(new Date()) > this.duesFrom) {
+//     return differenceInDays(new Date(), this.duesFrom);
+//   }
+// });
 
 module.exports = mongoose.model('Payment', paymentSchema);

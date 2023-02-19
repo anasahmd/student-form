@@ -168,7 +168,6 @@ app.get(
   '/student/payment',
   catchAsync(async (req, res) => {
     const paymentData = await Payment.findOne({ email: req.user.email });
-    console.log(paymentData.dues);
     res.render('student/payment', { paymentData });
   })
 );
@@ -252,7 +251,7 @@ app.post(
     const student = await Student.findById(req.params.id);
     const monthlyData = [];
     for (let i = 0; i < 12; i++) {
-      const endDate = addMonths(endOfMonth(new Date('2023-01-21')), i);
+      const endDate = endOfMonth(addMonths(new Date('2023-01-01'), i));
       const paid = false;
       const amount = 1000;
       monthlyData.push({ endDate, amount, paid });
@@ -262,7 +261,6 @@ app.post(
       monthlyData,
       student: student._id,
       email: student.email,
-      duesFrom: endOfMonth(new Date('2023-01-21')),
     });
     student.status = 1;
     student.payment = newPayment._id;

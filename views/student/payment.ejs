@@ -3,7 +3,6 @@
   <thead>
     <tr>
       <th scope="col">Month</th>
-      <th scope="col">Amount</th>
       <th scope="col">Actions</th>
     </tr>
   </thead>
@@ -11,13 +10,25 @@
     <% paymentData.monthlyData.forEach(data => { %>
     <tr>
       <td><%= format(data.endDate, 'MMM yyyy') %></td>
-      <td><%= data.amount %></td>
       <td>
         <%if( data.paid){ %>
         <button type="button" class="btn btn-success">Paid</button>
         <% } else { %>
         <form action="/student/payment/<%= data._id %>" method="POST">
-          <button type="submit" class="btn btn-warning">Pay</button>
+          <% if (paymentData.monthlyData[paymentData.monthlyData.findIndex(({
+          _id }) => _id === data._id) - 1] &&
+          paymentData.monthlyData[paymentData.monthlyData.findIndex(({ _id }) =>
+          _id === data._id) - 1].paid !== true){ %>
+          <button type="submit" class="btn btn-warning" disabled>
+            Pay ₹<% if(data.lateFees){ %><%= data.amount + data.lateFees %><% }
+            else { %><%= data.amount %><% } %>
+          </button>
+          <% } else { %>
+          <button type="submit" class="btn btn-warning">
+            Pay ₹<% if(data.lateFees){ %><%= data.amount + data.lateFees %><% }
+            else { %><%= data.amount %><% } %>
+          </button>
+          <% } %>
         </form>
         <% } %>
       </td>
