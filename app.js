@@ -9,7 +9,14 @@ const session = require('express-session');
 const flash = require('connect-flash');
 const passport = require('passport');
 const LocalStrategy = require('passport-local');
-const { format, endOfMonth, addMonths, subMonths } = require('date-fns');
+const {
+  format,
+  endOfMonth,
+  addMonths,
+  subMonths,
+  compareAsc,
+  parseISO,
+} = require('date-fns');
 const Student = require('./models/student');
 const User = require('./models/user');
 const Payment = require('./models/payment');
@@ -104,13 +111,18 @@ app.post(
     failureFlash: true,
     failureRedirect: '/login',
   }),
-  (req, res) => {
+  catchAsync(async (req, res) => {
     if (req.user.role === 'admin') {
       res.redirect('/admin/dashboard');
     } else if (req.user.role === 'student') {
-      res.redirect('/student/payment');
+      const user = await req.user.populate('student');
+      if (user.student.status === 1) {
+        res.redirect('/student/payment');
+      } else {
+        res.redirect('/student/apply');
+      }
     }
-  }
+  })
 );
 
 app.get(
@@ -124,6 +136,10 @@ app.get(
     });
   })
 );
+
+app.get('/user/forgotpassword', (req, res) => {
+  res.render('user/forgotpwd');
+});
 
 app.get(
   '/student/apply',
@@ -169,6 +185,49 @@ app.get(
   catchAsync(async (req, res) => {
     const paymentData = await Payment.findOne({ email: req.user.email });
     res.render('student/payment', { paymentData });
+  })
+);
+
+app.post(
+  '/student/payment/totaldues',
+  catchAsync(async (req, res) => {
+    const paymentData = await Payment.findOne({ email: req.user.email });
+    const months = paymentData.monthlyData.filter((n) => n.paid !== true);
+    months.forEach((month) => {
+      month.paid = true;
+    });
+    await paymentData.save();
+    res.redirect('back');
+  })
+);
+
+app.post(
+  '/student/payment/currentdues',
+  catchAsync(async (req, res) => {
+    const paymentData = await Payment.findOne({ email: req.user.email });
+    const months = paymentData.monthlyData.filter(
+      (n) => n.endDate <= endOfMonth(new Date())
+    );
+    months.forEach((month) => {
+      month.paid = true;
+    });
+    await paymentData.save();
+    res.redirect('back');
+  })
+);
+
+app.post(
+  '/student/payment/month',
+  catchAsync(async (req, res) => {
+    const paymentData = await Payment.findOne({ email: req.user.email });
+    const months = paymentData.monthlyData.filter(
+      (n) => endOfMonth(new Date(req.body.month)) >= new Date(n.endDate)
+    );
+    months.forEach((month) => {
+      month.paid = true;
+    });
+    await paymentData.save();
+    res.redirect('back');
   })
 );
 

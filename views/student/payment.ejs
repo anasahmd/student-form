@@ -2,11 +2,61 @@
 <table class="table table-bordered">
   <thead>
     <tr>
-      <th scope="col">Month</th>
+      <th scope="col">Period</th>
       <th scope="col">Actions</th>
     </tr>
   </thead>
   <tbody>
+    <tr>
+      <td>Current Dues</td>
+      <td>
+        <% if(paymentData.currentDues !== 0){ %>
+        <form action="/student/payment/currentDues" method="POST">
+          <button type="submit" class="btn btn-warning">
+            Pay ₹<%= paymentData.currentDues %>
+          </button>
+        </form>
+        <% } else { %>
+        <button type="button" class="btn btn-success">Paid</button>
+        <% } %>
+      </td>
+    </tr>
+    <tr>
+      <td>Total Dues</td>
+      <td>
+        <% if(paymentData.totalDues !== 0){ %>
+        <form action="/student/payment/totalDues" method="POST">
+          <button type="submit" class="btn btn-warning">
+            Pay ₹<%= paymentData.totalDues %>
+          </button>
+        </form>
+        <% } else { %>
+        <button type="button" class="btn btn-success">Paid</button>
+        <% } %>
+      </td>
+    </tr>
+    <tr>
+      <td>Pay Upto</td>
+      <td>
+        <form action="/student/payment/month" method="POST" class="d-flex">
+          <select
+            class="form-select"
+            aria-label="Default select example"
+            class="w-50"
+            name="month"
+          >
+            <% paymentData.monthlyData.forEach(data => { %>
+            <option value="<%= data.endDate%>">
+              <%= format(data.endDate, 'MMM yyyy') %>
+            </option>
+            <% }) %>
+          </select>
+          <button type="submit" class="btn btn-warning w-auto mx-5 px-3">
+            Pay
+          </button>
+        </form>
+      </td>
+    </tr>
     <% paymentData.monthlyData.forEach(data => { %>
     <tr>
       <td><%= format(data.endDate, 'MMM yyyy') %></td>

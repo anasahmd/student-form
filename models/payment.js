@@ -28,17 +28,43 @@ paymentSchema
   .path('monthlyData')
   .schema.virtual('lateFees')
   .get(function () {
-    // return format(this.endDate, 'MMMyyyy');
     if (this.paid !== true && new Date() > this.endDate) {
-      return differenceInDays(
+      const monthDays = differenceInDays(
         endOfMonth(addDays(this.endDate, 1)),
         this.endDate
-      ) < differenceInDays(new Date(), this.endDate)
-        ? differenceInDays(endOfMonth(addDays(this.endDate, 1)), this.endDate) *
-            10
-        : differenceInDays(new Date(), this.endDate) * 10;
+      );
+      const currentDays = differenceInDays(new Date(), this.endDate);
+      return (currentDays > monthDays ? monthDays : currentDays) * 10;
     }
   });
+
+paymentSchema.virtual('currentDues').get(function () {
+  const months = this.monthlyData.filter(
+    (n) => n.endDate <= endOfMonth(new Date())
+  );
+  let dues = 0;
+  months.forEach((month) => {
+    if (month.paid != true) {
+      dues = dues + month.amount;
+      if (month.lateFees) {
+        dues = dues + month.lateFees;
+      }
+    }
+  });
+  return dues;
+});
+
+paymentSchema.virtual('totalDues').get(function () {
+  const months = this.monthlyData.filter((n) => n.paid !== true);
+  let dues = 0;
+  months.forEach((month) => {
+    dues = dues + month.amount;
+    if (month.lateFees) {
+      dues = dues + month.lateFees;
+    }
+  });
+  return dues;
+});
 
 // paymentSchema.virtual('dues').get(function () {
 //   if (endOfMonth(new Date()) > this.duesFrom) {
