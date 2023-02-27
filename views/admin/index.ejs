@@ -1,20 +1,20 @@
 <% layout('layouts/boilerplate')%>
 <div class="d-flex m-3 gap-3">
-  <button type="button" class="btn btn-secondary">
-    <a class="text-reset" href="/admin/dashboard/">All</a>
-  </button>
-  <button type="button" class="btn btn-warning">
-    <a class="text-reset" href="/admin/dashboard/pending">Pending</a>
-  </button>
-  <button type="button" class="btn btn-success">
-    <a class="text-reset" href="/admin/dashboard/accepted">Accepted</a>
-  </button>
-  <button type="button" class="btn btn-danger">
-    <a class="text-reset" href="/admin/dashboard/rejected">Rejected</a>
-  </button>
-  <button type="button" class="btn btn-primary">
-    <a class="text-reset" href="/admin/dashboard/passed">Passed</a>
-  </button>
+  <a class="text-reset" href="/admin/student?category=all">
+    <button type="button" class="btn btn-secondary">All</button>
+  </a>
+  <a class="text-reset" href="/admin/student?category=pending">
+    <button type="button" class="btn btn-warning">Pending</button>
+  </a>
+  <a class="text-reset" href="/admin/student?category=accepted">
+    <button type="button" class="btn btn-success">Accepted</button>
+  </a>
+  <a class="text-reset" href="/admin/student?category=rejected">
+    <button type="button" class="btn btn-danger">Rejected</button>
+  </a>
+  <a class="text-reset" href="/admin/student?category=passed">
+    <button type="button" class="btn btn-primary">Passed</button>
+  </a>
 </div>
 <table class="table table-bordered">
   <thead>
@@ -43,17 +43,26 @@
       <td><%= student.gender %></td>
       <td><%= student.address %></td>
       <td class="d-flex gap-2 px-2">
-        <form action="/student/accept/<%= student._id %>" method="POST">
+        <form
+          action="/student/actions?action=accept&id=<%= student._id %>"
+          method="POST"
+        >
           <button type="submit" class="btn btn-success">
             <i class="fa-solid fa-thumbs-up"></i>
           </button>
         </form>
-        <form action="/student/reject/<%= student._id %>" method="POST">
+        <form
+          action="/student/actions?action=reject&id=<%= student._id %>"
+          method="POST"
+        >
           <button type="submit" class="btn btn-danger">
             <i class="fa-solid fa-thumbs-down"></i>
           </button>
         </form>
-        <form action="/student/passed/<%= student._id %>" method="POST">
+        <form
+          action="/student/actions?action=passed&id=<%= student._id %>"
+          method="POST"
+        >
           <button type="submit" class="btn btn-primary">
             <i class="fa-solid fa-graduation-cap"></i>
           </button>

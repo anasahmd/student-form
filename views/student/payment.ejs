@@ -11,7 +11,7 @@
       <td>Current Dues</td>
       <td>
         <% if(paymentData.currentDues !== 0){ %>
-        <form action="/student/payment/currentDues" method="POST">
+        <form action="/student/payment?duration=currentDues" method="POST">
           <button type="submit" class="btn btn-warning">
             Pay ₹<%= paymentData.currentDues %>
           </button>
@@ -25,7 +25,7 @@
       <td>Total Dues</td>
       <td>
         <% if(paymentData.totalDues !== 0){ %>
-        <form action="/student/payment/totalDues" method="POST">
+        <form action="/student/payment?duration=totalDues" method="POST">
           <button type="submit" class="btn btn-warning">
             Pay ₹<%= paymentData.totalDues %>
           </button>
@@ -38,7 +38,11 @@
     <tr>
       <td>Pay Upto</td>
       <td>
-        <form action="/student/payment/month" method="POST" class="d-flex">
+        <form
+          action="/student/payment?duration=multiMonths"
+          method="POST"
+          class="d-flex"
+        >
           <select
             class="form-select"
             aria-label="Default select example"
@@ -64,7 +68,10 @@
         <%if( data.paid){ %>
         <button type="button" class="btn btn-success">Paid</button>
         <% } else { %>
-        <form action="/student/payment/<%= data._id %>" method="POST">
+        <form
+          action="/student/payment?duration=month&id=<%= data._id %>"
+          method="POST"
+        >
           <% if (paymentData.monthlyData[paymentData.monthlyData.findIndex(({
           _id }) => _id === data._id) - 1] &&
           paymentData.monthlyData[paymentData.monthlyData.findIndex(({ _id }) =>
